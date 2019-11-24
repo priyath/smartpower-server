@@ -1,0 +1,19 @@
+{
+  "name": "smartpower-server",
+  "version": "1.0.0",
+  "description": "server code for the smartpower project.",
+  "main": "datapumpservice.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/priyath/smartpower-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/priyath/smartpower-server/issues"
+  },
+  "homepage": "https://github.com/priyath/smartpower-server#readme"
+}
