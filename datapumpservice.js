@@ -474,8 +474,10 @@ function processValueRequest(req, res) {
 
 	    console.log('My query String ',myQueryString);
 
-		if ( myQueryString == '')
-			console.log('query is empty')
+		if ( myQueryString == '') {
+            console.log('query is empty');
+            outputRecords = 'API is up and running';
+        }
 		else
 		if (myValuesObj.calltype == 'Alert-Record')
 		{
@@ -612,4 +614,4 @@ console.log('CC',"<"+ emObj.filter.secondaryemail+">")
 }
 
 server.listen(6060,"localhost");
-console.log("server listening on 3306");
+console.log("server listening on 6060");
