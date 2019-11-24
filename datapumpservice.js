@@ -296,7 +296,7 @@ function processValueRequest(req, res) {
 		if (myValuesObj.calltype == 'Monitoring-Points-CP')
 		{
 
-		myQueryString='select id,company,location,address01,address02,address03,primary_name,primary_mobile,iporurl,scan_enabled from monitoringpoints'
+		myQueryString='select locationid,company,location,address01,address02,address03,primary_name,primary_mobile,iporurl,scan_enabled from monitoringpoints'
 
 	}
 	else
