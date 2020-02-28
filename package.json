@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/priyath/smartpower-server/issues"
   },
-  "homepage": "https://github.com/priyath/smartpower-server#readme"
+  "homepage": "https://github.com/priyath/smartpower-server#readme",
+  "dependencies": {
+    "formidable": "^1.2.1",
+    "mosca": "^2.8.3",
+    "mqtt": "^3.0.0",
+    "mqtt-server": "^0.1.0",
+    "mysql": "^2.17.1"
+  }
 }
