@@ -429,6 +429,11 @@ function processValueRequest(req, res) {
 
 	}
 
+	else if (myValuesObj.calltype == 'Today-Status'){
+			myQueryString = 'SELECT MIN(readingvalue), MAX(readingvalue) FROM loghistory WHERE DATE(logdatestring) = CURRDATE();'
+			console.log(myQueryString);
+		}
+
 
 
 
