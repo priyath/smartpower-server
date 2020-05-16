@@ -430,7 +430,7 @@ function processValueRequest(req, res) {
 	}
 
 	else if (myValuesObj.calltype == 'Today-Stats'){
-			myQueryString = `SELECT MIN(readingvalue), MAX(readingvalue) FROM loghistory WHERE DATE(logdatestring) = CURDATE() AND location = '${myValuesObj.filter}'`;
+			myQueryString = `SELECT MIN(readingvalue) as minVoltage, MAX(readingvalue) as maxVoltage FROM loghistory WHERE DATE(logdatestring) = CURDATE() AND location = '${myValuesObj.filter}'`;
 			console.log(myQueryString);
 		}
 
