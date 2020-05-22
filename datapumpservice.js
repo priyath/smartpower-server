@@ -354,7 +354,7 @@ function processValueRequest(req, res) {
 		if (myValuesObj.calltype == 'History-Data')
 		{
 
-		myQueryString='SELECT * FROM loghistory WHERE '+myValuesObj.filter
+		myQueryString= `SELECT * FROM loghistory WHERE location = '${myValuesObj.filter}'`
 		console.log(myQueryString);
 	}
 
