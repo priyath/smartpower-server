@@ -434,8 +434,8 @@ function processValueRequest(req, res) {
 			console.log(myQueryString);
 		}
 
-	else if (myValuesObj.calltype === 'Today-Consumption'){
-		myQueryString = `select SUM(energy) as todayEnergy, MAX(power) todayPeakKW from realtimedata WHERE MONTH(read_time) = MONTH(CURRENT_DATE()) AND YEAR(read_time) = YEAR(CURRENT_DATE()) AND location = '${myValuesObj.filter}'`;
+	else if (myValuesObj.calltype === 'Today-Data'){
+		myQueryString = `select SUM(energy) as todayEnergy, MIN(voltage_ln_average) as minVoltage, MAX(voltage_ln_average) as maxVoltage, MAX(power) todayPeakKW from realtimedata WHERE MONTH(read_time) = MONTH(CURRENT_DATE()) AND YEAR(read_time) = YEAR(CURRENT_DATE()) AND location = '${myValuesObj.filter}'`;
 		console.log(myQueryString);
 	}
 
