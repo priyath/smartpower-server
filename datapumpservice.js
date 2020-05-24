@@ -429,11 +429,15 @@ function processValueRequest(req, res) {
 
 	}
 
-	else if (myValuesObj.calltype == 'Today-Stats'){
+	else if (myValuesObj.calltype === 'Today-Stats'){
 			myQueryString = `SELECT MIN(readingvalue) as minVoltage, MAX(readingvalue) as maxVoltage FROM loghistory WHERE DATE(logdatestring) = CURDATE() AND location = '${myValuesObj.filter}'`;
 			console.log(myQueryString);
 		}
 
+	else if (myValuesObj.calltype === 'Today-Consumption'){
+		myQueryString = `select SUM(energy) as todayEnergy, MAX(power) todayPeakKW from realtimedata WHERE MONTH(read_time) = MONTH(CURRENT_DATE()) AND YEAR(read_time) = YEAR(CURRENT_DATE()) AND location = '${myValuesObj.filter}'`;
+		console.log(myQueryString);
+	}
 
 
 
