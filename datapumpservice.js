@@ -440,7 +440,7 @@ function processValueRequest(req, res) {
 	}
 	else if (myValuesObj.calltype === 'Comparison-Data'){
 		console.log('Comparison Data');
-		myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m'), read_time, power  FROM realtimedata WHERE DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.fromDate}' OR DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.toDate}' AND location = '${myValuesObj.filter}'`
+		myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, read_time, power  FROM realtimedata WHERE DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.fromDate}' OR DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.toDate}' AND location = '${myValuesObj.filter}'`
 		console.log(myQueryString)
 			return
 	}
