@@ -438,6 +438,12 @@ function processValueRequest(req, res) {
 		myQueryString = `select IFNULL(SUM(energy), 0) as todayEnergy, IFNULL(MIN(voltage_ln_average), 0) as minVoltage, IFNULL(MAX(voltage_ln_average), 0) as maxVoltage, IFNULL(MAX(power), 0) todayPeakKW from realtimedata WHERE MONTH(read_time) = MONTH(CURRENT_DATE()) AND YEAR(read_time) = YEAR(CURRENT_DATE()) AND location = '${myValuesObj.filter}'`;
 		console.log(myQueryString);
 	}
+	else if (myValuesObj.calltype === 'Comparison-Data'){
+		console.log('Comparison Data');
+		myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m'), read_time, power  FROM realtimedata WHERE DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.fromDate}' OR DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.toDate}' AND location = '${myValuesObj.filter}'`
+		console.log(myQueryString)
+			return
+	}
 
 
 
