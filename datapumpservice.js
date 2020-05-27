@@ -3,6 +3,7 @@ var fs = require('fs');
 var formidable = require("formidable");
 var util = require('util');
 var mysql = require("mysql");
+const { getEnergyBuckets } = require('./manager');
 
 // var locationFilter=''; // moved to front end
 
@@ -440,7 +441,7 @@ function processValueRequest(req, res) {
 	}
 	else if (myValuesObj.calltype === 'Comparison-Data'){
 		console.log('Comparison Data');
-		myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, read_time, power  FROM realtimedata WHERE DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.fromDate}' OR DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.toDate}' AND location = '${myValuesObj.filter}'`
+		myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.fromDate}' OR DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.toDate}' AND location = '${myValuesObj.filter}'`
 		console.log(myQueryString)
 			return
 	}
@@ -513,7 +514,11 @@ function processValueRequest(req, res) {
 					else
 					{
 
-						 outputRecords=JSON.stringify(rows);
+					 	outputRecords=JSON.stringify(rows);
+					 	if (myValuesObj.calltype === 'Comparison-Data'){
+							const energyData = getEnergyBuckets(JSON.parse(outputRecords),  myValuesObj);
+							outputRecords = JSON.stringify(energyData);
+						}
 
 					}
 					});
