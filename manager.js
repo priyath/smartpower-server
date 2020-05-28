@@ -1,5 +1,6 @@
 const  { orderBy } = require('lodash');
 const WEEK_SECONDS = 604800;
+const DAY_SECONDS = 86400;
 
 const getStartEndTimestampForMonth = (year, month) => {
     const lastMonth = parseInt(month) + 1;
@@ -93,29 +94,36 @@ const performEnergyCalculation = (records, periodTimestamps) => {
 }
 
 const getTimeBuckets = (granularity, year, month) => {
+    let splitInterval;
     let periodBlocks = [];
+    const {firstTimestamp, lastTimestamp} = getStartEndTimestampForMonth(year, month);
+    let initialTimestamp = firstTimestamp;
+
     if (granularity === 'week'){
-        const {firstTimestamp, lastTimestamp} = getStartEndTimestampForMonth(year, month);
-        let initialTimestamp = firstTimestamp;
+        splitInterval = WEEK_SECONDS;
+    } else if (granularity === 'day'){
+        splitInterval = DAY_SECONDS;
+    } else {
+        splitInterval = lastTimestamp;
+    }
 
-        let endTimestamp;
-        let counter = 1;
+    let endTimestamp;
+    let counter = 1;
 
-        let terminate = false;
-        while (!terminate){
-            endTimestamp = initialTimestamp + WEEK_SECONDS;
-            if (endTimestamp >= lastTimestamp){
-                endTimestamp = lastTimestamp;
-                terminate = true;
-            }
-            periodBlocks.push({
-                startTime: initialTimestamp,
-                endTime: endTimestamp,
-                blockNumber: counter,
-            })
-            counter += 1;
-            initialTimestamp = initialTimestamp + WEEK_SECONDS;
+    let terminate = false;
+    while (!terminate){
+        endTimestamp = initialTimestamp + splitInterval;
+        if (endTimestamp >= lastTimestamp){
+            endTimestamp = lastTimestamp;
+            terminate = true;
         }
+        periodBlocks.push({
+            startTime: initialTimestamp,
+            endTime: endTimestamp,
+            blockNumber: counter,
+        })
+        counter += 1;
+        initialTimestamp = initialTimestamp + splitInterval;
     }
     return periodBlocks;
 }
