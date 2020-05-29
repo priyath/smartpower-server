@@ -352,12 +352,54 @@ function processValueRequest(req, res) {
 		console.log(myValuesObj);
 	}
 	   else
-		if (myValuesObj.calltype == 'History-Data')
+		if (myValuesObj.calltype === 'History-Data')
 		{
+			const granularity = myValuesObj.granularity;
+			const fromDate = myValuesObj.fromDate;
+			const toDate = myValuesObj.toDate;
 
-		myQueryString= `SELECT id,location, unix_timestamp(logdatestring)*1000 as timestamp, Scantype, readingvalue,updatedstatus FROM loghistory WHERE location = '${myValuesObj.filter}'`
-		console.log(myQueryString);
-	}
+			if (!fromDate || !toDate){
+				myQueryString = `SELECT 
+					id,
+					location, 
+					unix_timestamp(date(read_time))*1000 as timestamp, 
+					AVG(voltage_ln_average) as voltage_ln_average,
+					AVG(frequency) as frequency
+					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
+					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time)`
+			}
+			if (granularity === 'day'){
+				myQueryString = `SELECT 
+					id,
+					location, 
+					unix_timestamp(date(read_time))*1000 as timestamp, 
+					AVG(voltage_ln_average) as voltage_ln_average,
+					AVG(frequency) as frequency
+					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
+					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time)`
+			}
+			if (granularity === 'hour'){
+				myQueryString = `SELECT 
+					id,
+					location, 
+					CAST(UNIX_TIMESTAMP(DATE_ADD(DATE_FORMAT(read_time, "%Y-%m-%d %H:00:00"),INTERVAL IF(MINUTE(read_time) < 30, 0, 1) HOUR)) AS SIGNED)*1000 AS timestamp,
+					AVG(voltage_ln_average) as voltage_ln_average,
+					AVG(frequency) as frequency
+					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
+					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time), DAY(read_time), HOUR(read_time)`
+			}
+			if (granularity === 'min'){
+				myQueryString = `SELECT 
+					id,
+					location, 
+					UNIX_TIMESTAMP(SEC_TO_TIME(((TIME_TO_SEC(read_time)) DIV 60) * 60))*1000 as timestamp,
+					AVG(voltage_ln_average) as voltage_ln_average,
+					AVG(frequency) as frequency
+					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
+					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time), DAY(read_time), HOUR(read_time), MINUTE(read_time)`
+			}
+			console.log(myQueryString);
+		}
 
 		else
 		if (myValuesObj.calltype == 'Heart-Beat-DB')
