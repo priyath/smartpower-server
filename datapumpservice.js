@@ -382,7 +382,7 @@ function processValueRequest(req, res) {
 				myQueryString = `SELECT 
 					id,
 					location, 
-					CAST(UNIX_TIMESTAMP(DATE_ADD(DATE_FORMAT(read_time, "%Y-%m-%d %H:00:00"),INTERVAL IF(MINUTE(read_time) < 30, 0, 1) HOUR)) AS SIGNED)*1000 AS timestamp,
+					CAST(UNIX_TIMESTAMP((DATE_FORMAT(read_time, "%Y-%m-%d %H:00:00"))) AS SIGNED)*1000 AS timestamp,
 					AVG(voltage_ln_average) as voltage_ln_average,
 					AVG(frequency) as frequency
 					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
@@ -392,7 +392,7 @@ function processValueRequest(req, res) {
 				myQueryString = `SELECT 
 					id,
 					location, 
-					UNIX_TIMESTAMP(SEC_TO_TIME(((TIME_TO_SEC(read_time)) DIV 60) * 60))*1000 as timestamp,
+					CAST(UNIX_TIMESTAMP(DATE_FORMAT(read_time, "%Y-%m-%d %H:%i:00")) AS SIGNED)*1000 AS timestamp,
 					AVG(voltage_ln_average) as voltage_ln_average,
 					AVG(frequency) as frequency
 					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
