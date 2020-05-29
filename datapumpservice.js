@@ -362,13 +362,13 @@ function processValueRequest(req, res) {
 				myQueryString = `SELECT 
 					id,
 					location, 
-					unix_timestamp(date(read_time))*1000 as timestamp, 
+					unix_timestamp(date_format(read_time, '%Y-%m-01'))*1000 as timestamp, 
 					AVG(voltage_ln_average) as voltage_ln_average,
 					AVG(frequency) as frequency
 					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
-					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time)`
+					GROUP BY YEAR(read_time), MONTH(read_time)`
 			}
-			if (granularity === 'day'){
+			else if (granularity === 'day'){
 				myQueryString = `SELECT 
 					id,
 					location, 
@@ -378,7 +378,7 @@ function processValueRequest(req, res) {
 					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
 					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time)`
 			}
-			if (granularity === 'hour'){
+			else if (granularity === 'hour'){
 				myQueryString = `SELECT 
 					id,
 					location, 
@@ -388,7 +388,7 @@ function processValueRequest(req, res) {
 					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
 					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time), DAY(read_time), HOUR(read_time)`
 			}
-			if (granularity === 'min'){
+			else if (granularity === 'min'){
 				myQueryString = `SELECT 
 					id,
 					location, 
