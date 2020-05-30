@@ -19,8 +19,8 @@ const getDatasetByDate = (records, date) => {
     }
 }
 
-const getBlockForTimestamp = (timestamp, periodBlocks) => {
-    const blocks = periodBlocks.filter((block) => {
+const getBlockForTimestamp = (timestamp, timeBuckets) => {
+    const blocks = timeBuckets.filter((block) => {
         return timestamp >= block.startTime && timestamp < block.endTime;
     });
     return blocks[0];
@@ -44,14 +44,14 @@ const isTimestampInBlock = (timestamp, block) => {
     return timestamp >= block.startTime && timestamp < block.endTime;
 }
 
-const getBlocks = (currTime, nextTime, periodTimestamps, avgPower) => {
+const getBlocks = (currTime, nextTime, timeBuckets, avgPower) => {
     let blocks = []
 
     let terminate = false;
     let startTime = currTime;
 
     while (!terminate) {
-        let block = getBlockForTimestamp(startTime, periodTimestamps);
+        let block = getBlockForTimestamp(startTime, timeBuckets);
         let endTime = block.endTime;
 
         if (isTimestampInBlock(nextTime, block)){
@@ -77,7 +77,7 @@ const getEnergy = (startTime, endTime, power) => {
 }
 
 
-const performEnergyCalculation = (records, periodTimestamps) => {
+const performEnergyCalculation = (records, timeBuckets) => {
     return records.reduce((accumulator, record, idx, arr) => {
         if (idx+1 < arr.length) {
             const currTime = record.read_time;
@@ -87,7 +87,7 @@ const performEnergyCalculation = (records, periodTimestamps) => {
             const nextPower = arr[idx + 1].power;
             const avgPower = (currPower + nextPower)/2
 
-            return accumulator.concat(getBlocks(currTime, nextTime, periodTimestamps, avgPower));
+            return accumulator.concat(getBlocks(currTime, nextTime, timeBuckets, avgPower));
         }
         return accumulator;
     }, [])
@@ -133,11 +133,8 @@ const splitDate = (dateString) => {
     return {year: parseInt(splitArr[0]), month:  parseInt(splitArr[1])};
 }
 
-
-const calculateEnergy = (records, granularity, date) => {
+const getEnergyConsumption = (records, timeBuckets) => {
     records = orderBy(records, ['read_time']);
-    const {year, month} = splitDate(date);
-    const timeBuckets = getTimeBuckets(granularity, year, (month-1));
     const recordsWithEnergy = performEnergyCalculation(records, timeBuckets);
 
     return timeBuckets.map((bucket) => {
@@ -159,6 +156,14 @@ const calculateEnergy = (records, granularity, date) => {
     })
 }
 
+
+const calculateEnergy = (records, granularity, date) => {
+    const {year, month} = splitDate(date);
+    const timeBuckets = getTimeBuckets(granularity, year, (month-1));
+
+    return getEnergyConsumption(records, timeBuckets);
+}
+
 const getEnergyBuckets = (records, reqObject) => {
     const fromDate = reqObject.fromDate;
     const toDate = reqObject.toDate;
@@ -171,6 +176,20 @@ const getEnergyBuckets = (records, reqObject) => {
 
 }
 
+const getGenericTimeBucket = () => {
+    return [{
+        startTime: 0,
+            endTime: 9999999999999,
+        blockNumber: 1,
+    }];
+}
+
+const getTotalEnergyConsumption = (records) => {
+    const timeBuckets = getGenericTimeBucket();
+    return getEnergyConsumption(records, timeBuckets);
+}
+
 module.exports = {
     getEnergyBuckets,
+    getTotalEnergyConsumption,
 }

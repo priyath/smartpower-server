@@ -3,7 +3,7 @@ var fs = require('fs');
 var formidable = require("formidable");
 var util = require('util');
 var mysql = require("mysql");
-const { getEnergyBuckets } = require('./manager');
+const { getEnergyBuckets, getTotalEnergyConsumption } = require('./manager');
 
 // var locationFilter=''; // moved to front end
 
@@ -487,6 +487,12 @@ function processValueRequest(req, res) {
 		console.log(myQueryString)
 			return
 	}
+		else if (myValuesObj.calltype === 'Energy-Consumption'){
+			console.log('Energy Consumption Data');
+			myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE location = '${myValuesObj.filter}'`
+			console.log(myQueryString)
+			return
+		}
 
 
 
@@ -560,6 +566,10 @@ function processValueRequest(req, res) {
 					 	if (myValuesObj.calltype === 'Comparison-Data'){
 							const energyData = getEnergyBuckets(JSON.parse(outputRecords),  myValuesObj);
 							outputRecords = JSON.stringify(energyData);
+						}
+					 	else if (myValuesObj.calltype === 'Energy-Consumption') {
+							const energyConsumption = getTotalEnergyConsumption(JSON.parse(outputRecords));
+							outputRecords = JSON.stringify(energyConsumption);
 						}
 
 					}
