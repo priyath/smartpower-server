@@ -3,7 +3,7 @@ const WEEK_SECONDS = 604800;
 const DAY_SECONDS = 86400;
 
 const getStartEndTimestampForMonth = (year, month) => {
-    const tzOffset = 19800000;
+    const tzOffset = -19800000;
     const lastMonth = parseInt(month) + 1;
     const date = new Date(year, month, 1);
     const lastDate = new Date(year, lastMonth, 1);
