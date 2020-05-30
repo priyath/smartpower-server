@@ -354,7 +354,7 @@ function processValueRequest(req, res) {
 	}
 	   else
 		if (myValuesObj.calltype === 'History-Data')
-		{
+		{ //TODO: should change for a timestamp based implementation
 			const granularity = myValuesObj.granularity;
 			const fromDate = myValuesObj.fromDate;
 			const toDate = myValuesObj.toDate;
@@ -366,7 +366,7 @@ function processValueRequest(req, res) {
 					unix_timestamp(date_format(read_time, '%Y-%m-01'))*1000 as timestamp, 
 					AVG(voltage_ln_average) as voltage_ln_average,
 					AVG(frequency) as frequency
-					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
+					FROM realtimedata WHERE location = '${myValuesObj.filter}'
 					GROUP BY YEAR(read_time), MONTH(read_time)`
 			}
 			else if (granularity === 'day'){
@@ -376,7 +376,8 @@ function processValueRequest(req, res) {
 					unix_timestamp(date(read_time))*1000 as timestamp, 
 					AVG(voltage_ln_average) as voltage_ln_average,
 					AVG(frequency) as frequency
-					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
+					FROM realtimedata WHERE location = '${myValuesObj.filter}' AND 
+					(DATE_FORMAT(read_time, '%Y-%m') >= '${myValuesObj.fromDate}' AND DATE_FORMAT(read_time, '%Y-%m') < '${myValuesObj.toDate}')
 					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time)`
 			}
 			else if (granularity === 'hour'){
@@ -386,7 +387,8 @@ function processValueRequest(req, res) {
 					CAST(UNIX_TIMESTAMP((DATE_FORMAT(read_time, "%Y-%m-%d %H:00:00"))) AS SIGNED)*1000 AS timestamp,
 					AVG(voltage_ln_average) as voltage_ln_average,
 					AVG(frequency) as frequency
-					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
+					FROM realtimedata WHERE location = '${myValuesObj.filter}' AND 
+					(DATE_FORMAT(read_time, '%Y-%m-%d') >= '${myValuesObj.fromDate}' AND DATE_FORMAT(read_time, '%Y-%m-%d') < '${myValuesObj.toDate}')
 					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time), DAY(read_time), HOUR(read_time)`
 			}
 			else if (granularity === 'min'){
@@ -396,7 +398,8 @@ function processValueRequest(req, res) {
 					CAST(UNIX_TIMESTAMP(DATE_FORMAT(read_time, "%Y-%m-%d %H:%i:00")) AS SIGNED)*1000 AS timestamp,
 					AVG(voltage_ln_average) as voltage_ln_average,
 					AVG(frequency) as frequency
-					FROM realtimedata WHERE location = '${myValuesObj.filter}' 
+					FROM realtimedata WHERE location = '${myValuesObj.filter}' AND 
+					(DATE_FORMAT(read_time, '%Y-%m-%d %H') >= '${myValuesObj.fromDate}' AND DATE_FORMAT(read_time, '%Y-%m-%d %H') < '${myValuesObj.toDate}')
 					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time), DAY(read_time), HOUR(read_time), MINUTE(read_time)`
 			}
 			console.log(myQueryString);
@@ -484,7 +487,7 @@ function processValueRequest(req, res) {
 	}
 	else if (myValuesObj.calltype === 'Comparison-Data'){
 		console.log('Comparison Data');
-		myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.fromDate}' OR DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.toDate}' AND location = '${myValuesObj.filter}'`
+		myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE (DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.fromDate}' OR DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.toDate}') AND location = '${myValuesObj.filter}'`
 		console.log(myQueryString)
 			return
 	}
