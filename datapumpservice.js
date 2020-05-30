@@ -568,7 +568,7 @@ function processValueRequest(req, res) {
 							outputRecords = JSON.stringify(energyData);
 						}
 					 	else if (myValuesObj.calltype === 'Energy-Consumption') {
-							const energyConsumption = getTotalEnergyConsumption(JSON.parse(outputRecords));
+							const energyConsumption = getTotalEnergyConsumption(JSON.parse(outputRecords), myValuesObj);
 							outputRecords = JSON.stringify(energyConsumption);
 						}
 

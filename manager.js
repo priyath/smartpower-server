@@ -133,7 +133,7 @@ const splitDate = (dateString) => {
     return {year: parseInt(splitArr[0]), month:  parseInt(splitArr[1])};
 }
 
-const getEnergyConsumption = (records, timeBuckets) => {
+const getEnergyConsumption = (records, timeBuckets, myValuesObj) => {
     records = orderBy(records, ['read_time']);
     const recordsWithEnergy = performEnergyCalculation(records, timeBuckets);
 
@@ -152,6 +152,7 @@ const getEnergyConsumption = (records, timeBuckets) => {
         energyObject.bucketNumber = bucket.blockNumber;
         energyObject.startTime = bucket.startTime;
         energyObject.endTime = bucket.endTime;
+        energyObject.location = myValuesObj && myValuesObj.location ? myValuesObj.location : '';
         return energyObject;
     })
 }
@@ -184,9 +185,9 @@ const getGenericTimeBucket = () => {
     }];
 }
 
-const getTotalEnergyConsumption = (records) => {
+const getTotalEnergyConsumption = (records, myValuesObj) => {
     const timeBuckets = getGenericTimeBucket();
-    return getEnergyConsumption(records, timeBuckets);
+    return getEnergyConsumption(records, timeBuckets, myValuesObj);
 }
 
 module.exports = {
