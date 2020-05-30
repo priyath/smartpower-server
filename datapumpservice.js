@@ -581,23 +581,33 @@ function processValueRequest(req, res) {
 							outputRecords=JSON.stringify(rows);
 						}
 
+						res.setHeader('Access-Control-Allow-Origin', '*');
+						res.writeHead(200, {
+							'content-type': 'application/json'
+							//'content-type': 'x-application/json'
+						});
+
+						res.end(outputRecords);
+						console.log(myQueryString);
+						console.log('Responded to Request');
+
 					}
 					});
 		}
 
-		setTimeout(function () {
-
-		res.setHeader('Access-Control-Allow-Origin', '*');
-        res.writeHead(200, {
-			'content-type': 'application/json'
-            //'content-type': 'x-application/json'
-        });
-
-        res.end(outputRecords);
-		console.log(myQueryString);
-		console.log('Responded to Request');
-		//console.log(outputRecords);
-		},3000);
+		// setTimeout(function () {
+		//
+		// res.setHeader('Access-Control-Allow-Origin', '*');
+        // res.writeHead(200, {
+		// 	'content-type': 'application/json'
+        //     //'content-type': 'x-application/json'
+        // });
+		//
+        // res.end(outputRecords);
+		// console.log(myQueryString);
+		// console.log('Responded to Request');
+		// //console.log(outputRecords);
+		// },3000);
 	}
     });
     form.parse(req);
