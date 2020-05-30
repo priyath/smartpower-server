@@ -489,8 +489,10 @@ function processValueRequest(req, res) {
 	}
 		else if (myValuesObj.calltype === 'Energy-Consumption'){
 			console.log('Energy Consumption Data');
-			myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE location = '${myValuesObj.filter}'`
-			console.log(myQueryString)
+			let myQueryString1 = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE location = '${myValuesObj.filter}'`
+			let myQueryString2 = `SELECT location, COUNT(*) FROM criticalalerts WHERE location = '${myValuesObj.filter}'`
+			myQueryString = [myQueryString1, myQueryString2];
+			console.log(myQueryString);
 			return
 		}
 
@@ -562,14 +564,19 @@ function processValueRequest(req, res) {
 					else
 					{
 
-					 	outputRecords=JSON.stringify(rows);
 					 	if (myValuesObj.calltype === 'Comparison-Data'){
+							outputRecords=JSON.stringify(rows);
 							const energyData = getEnergyBuckets(JSON.parse(outputRecords),  myValuesObj);
 							outputRecords = JSON.stringify(energyData);
 						}
 					 	else if (myValuesObj.calltype === 'Energy-Consumption') {
+					 		outputRecords = JSON.stringify(rows[0]);
 							const energyConsumption = getTotalEnergyConsumption(JSON.parse(outputRecords), myValuesObj);
+							console.log(rows[1]);
 							outputRecords = JSON.stringify(energyConsumption);
+						}
+					 	else {
+							outputRecords=JSON.stringify(rows);
 						}
 
 					}
