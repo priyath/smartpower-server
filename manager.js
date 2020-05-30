@@ -152,7 +152,7 @@ const getEnergyConsumption = (records, timeBuckets, myValuesObj) => {
         energyObject.bucketNumber = bucket.blockNumber;
         energyObject.startTime = bucket.startTime;
         energyObject.endTime = bucket.endTime;
-        energyObject.location = myValuesObj && myValuesObj.location ? myValuesObj.location : '';
+        energyObject.location = myValuesObj && myValuesObj.filter ? myValuesObj.filter : '';
         return energyObject;
     })
 }
