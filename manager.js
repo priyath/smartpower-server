@@ -50,7 +50,7 @@ const getBlocks = (currTime, nextTime, timeBuckets, avgPower) => {
     let terminate = false;
     let startTime = currTime;
 
-    while (!terminate) {
+    while (terminate) {
         let block = getBlockForTimestamp(startTime, timeBuckets);
         let endTime = block.endTime;
 
