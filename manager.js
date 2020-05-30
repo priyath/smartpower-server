@@ -50,7 +50,7 @@ const getBlocks = (currTime, nextTime, timeBuckets, avgPower) => {
     let terminate = false;
     let startTime = currTime;
 
-    while (terminate) {
+    while (!terminate) {
         let block = getBlockForTimestamp(startTime, timeBuckets);
         let endTime = block.endTime;
 
@@ -78,6 +78,25 @@ const getEnergy = (startTime, endTime, power) => {
 
 
 const performEnergyCalculation = (records, timeBuckets) => {
+
+    // let accumulator = [];
+    //
+    // for (let i = 0; i < records.length-1; i++){
+    //     if (i % 10000 === 0)
+    //         console.log('processing record: ' + i);
+    //     const record = records[i];
+    //     const currTime = record.read_time;
+    //     const nextTime = records[i + 1].read_time;
+    //
+    //     const currPower = record.power;
+    //     const nextPower = records[i + 1].power;
+    //     const avgPower = (currPower + nextPower)/2
+    //
+    //     const blocks = getBlocks(currTime, nextTime, timeBuckets, avgPower);
+    //     accumulator.push(...blocks);
+    // }
+    // return accumulator;
+
     return records.reduce((accumulator, record, idx, arr) => {
         if (idx+1 < arr.length) {
             const currTime = record.read_time;
@@ -87,7 +106,8 @@ const performEnergyCalculation = (records, timeBuckets) => {
             const nextPower = arr[idx + 1].power;
             const avgPower = (currPower + nextPower)/2
 
-            return accumulator.concat(getBlocks(currTime, nextTime, timeBuckets, avgPower));
+            accumulator.push(...getBlocks(currTime, nextTime, timeBuckets, avgPower));
+            return accumulator;
         }
         return accumulator;
     }, [])
