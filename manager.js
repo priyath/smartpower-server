@@ -190,7 +190,17 @@ const getTotalEnergyConsumption = (records, myValuesObj) => {
     return getEnergyConsumption(records, timeBuckets, myValuesObj);
 }
 
+const addAlertInfo = (energyData, alertRows) => {
+    if (!alertRows || alertRows.length <= 0) return energyData;
+    return energyData.map(el => {
+        const alertRow = alertRows.filter((row) => el.location === row.location)
+        el.alertCount = alertRow && alertRow.length > 0 ? alertRow[0].alertCount : 0;
+        return el;
+    })
+}
+
 module.exports = {
     getEnergyBuckets,
     getTotalEnergyConsumption,
+    addAlertInfo,
 }

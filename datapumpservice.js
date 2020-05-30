@@ -3,7 +3,7 @@ var fs = require('fs');
 var formidable = require("formidable");
 var util = require('util');
 var mysql = require("mysql");
-const { getEnergyBuckets, getTotalEnergyConsumption } = require('./manager');
+const { getEnergyBuckets, getTotalEnergyConsumption, addAlertInfo } = require('./manager');
 
 // var locationFilter=''; // moved to front end
 
@@ -491,7 +491,7 @@ function processValueRequest(req, res) {
 		else if (myValuesObj.calltype === 'Energy-Consumption'){
 			console.log('Energy Consumption Data');
 			let myQueryString1 = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE location = '${myValuesObj.filter}'`
-			let myQueryString2 = `SELECT location, COUNT(*) FROM criticalalerts WHERE location = '${myValuesObj.filter}'`
+			let myQueryString2 = `SELECT location, COUNT(*) as alertCount FROM criticalalerts WHERE location = '${myValuesObj.filter}'`
 			myQueryString = myQueryString1 + '; ' + myQueryString2;
 			console.log(myQueryString);
 			return
@@ -572,9 +572,10 @@ function processValueRequest(req, res) {
 						}
 					 	else if (myValuesObj.calltype === 'Energy-Consumption') {
 					 		outputRecords = JSON.stringify(rows[0]);
+					 		let alertRecords = JSON.stringify(rows[1]);
 							const energyConsumption = getTotalEnergyConsumption(JSON.parse(outputRecords), myValuesObj);
-							console.log(rows[1]);
-							outputRecords = JSON.stringify(energyConsumption);
+							const energyConsumptionWithAlerts = addAlertInfo(energyConsumption, JSON.parse(alertRecords));
+							outputRecords = JSON.stringify(energyConsumptionWithAlerts);
 						}
 					 	else {
 							outputRecords=JSON.stringify(rows);
