@@ -365,7 +365,8 @@ function processValueRequest(req, res) {
 					location, 
 					unix_timestamp(date_format(read_time, '%Y-%m-01'))*1000 as timestamp, 
 					AVG(voltage_ln_average) as voltage_ln_average,
-					AVG(frequency) as frequency
+					AVG(frequency) as frequency,
+					AVG(current_average) as current_average
 					FROM realtimedata WHERE location = '${myValuesObj.filter}'
 					GROUP BY YEAR(read_time), MONTH(read_time)`
 			}
@@ -375,7 +376,8 @@ function processValueRequest(req, res) {
 					location, 
 					unix_timestamp(date(read_time))*1000 as timestamp, 
 					AVG(voltage_ln_average) as voltage_ln_average,
-					AVG(frequency) as frequency
+					AVG(frequency) as frequency,
+					AVG(current_average) as current_average
 					FROM realtimedata WHERE location = '${myValuesObj.filter}' AND 
 					(DATE_FORMAT(read_time, '%Y-%m') >= '${myValuesObj.fromDate}' AND DATE_FORMAT(read_time, '%Y-%m') < '${myValuesObj.toDate}')
 					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time)`
@@ -386,7 +388,8 @@ function processValueRequest(req, res) {
 					location, 
 					CAST(UNIX_TIMESTAMP((DATE_FORMAT(read_time, "%Y-%m-%d %H:00:00"))) AS SIGNED)*1000 AS timestamp,
 					AVG(voltage_ln_average) as voltage_ln_average,
-					AVG(frequency) as frequency
+					AVG(frequency) as frequency,
+					AVG(current_average) as current_average
 					FROM realtimedata WHERE location = '${myValuesObj.filter}' AND 
 					(DATE_FORMAT(read_time, '%Y-%m-%d') >= '${myValuesObj.fromDate}' AND DATE_FORMAT(read_time, '%Y-%m-%d') < '${myValuesObj.toDate}')
 					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time), DAY(read_time), HOUR(read_time)`
@@ -397,7 +400,8 @@ function processValueRequest(req, res) {
 					location, 
 					CAST(UNIX_TIMESTAMP(DATE_FORMAT(read_time, "%Y-%m-%d %H:%i:00")) AS SIGNED)*1000 AS timestamp,
 					AVG(voltage_ln_average) as voltage_ln_average,
-					AVG(frequency) as frequency
+					AVG(frequency) as frequency,
+					AVG(current_average) as current_average
 					FROM realtimedata WHERE location = '${myValuesObj.filter}' AND 
 					(DATE_FORMAT(read_time, '%Y-%m-%d %H') >= '${myValuesObj.fromDate}' AND DATE_FORMAT(read_time, '%Y-%m-%d %H') < '${myValuesObj.toDate}')
 					GROUP BY YEAR(read_time), MONTH(read_time), DAY(read_time), DAY(read_time), HOUR(read_time), MINUTE(read_time)`
