@@ -507,7 +507,7 @@ function processValueRequest(req, res) {
 		let lowerThreshold = myValuesObj.lowerThreshold;
 		let upperThreshold = myValuesObj.upperThreshold;
 		if (gaugeId && lowerThreshold && upperThreshold && !isNaN(lowerThreshold) && !isNaN(upperThreshold)) {
-			myQueryString = `UPDATE scantypes SET upperthreshold = ${upperThreshold}, lowerthreshold = ${lowerThreshold} WHERE scantypeid = ${gaugeId}`;
+			myQueryString = `UPDATE scantypes SET upperthreshold = ${upperThreshold}, lowerthreshold = ${lowerThreshold} WHERE scantypeid = '${gaugeId}'`;
 		}
 		console.log(myQueryString);
 	}
