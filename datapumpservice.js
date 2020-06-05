@@ -493,16 +493,24 @@ function processValueRequest(req, res) {
 		console.log('Comparison Data');
 		myQueryString = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE (DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.fromDate}' OR DATE_FORMAT(read_time, '%Y-%m') = '${myValuesObj.toDate}') AND location = '${myValuesObj.filter}'`
 		console.log(myQueryString)
-			return
 	}
-		else if (myValuesObj.calltype === 'Energy-Consumption'){
-			console.log('Energy Consumption Data');
-			let myQueryString1 = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE location = '${myValuesObj.filter}'`
-			let myQueryString2 = `SELECT location, COUNT(*) as alertCount FROM criticalalerts WHERE location = '${myValuesObj.filter}'`
-			myQueryString = myQueryString1 + '; ' + myQueryString2;
-			console.log(myQueryString);
-			return
+	else if (myValuesObj.calltype === 'Energy-Consumption'){
+		console.log('Energy Consumption Data');
+		let myQueryString1 = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE location = '${myValuesObj.filter}'`
+		let myQueryString2 = `SELECT location, COUNT(*) as alertCount FROM criticalalerts WHERE location = '${myValuesObj.filter}'`
+		myQueryString = myQueryString1 + '; ' + myQueryString2;
+		console.log(myQueryString);
+	}
+	else if (myValuesObj.calltype === 'Update-Thresholds'){
+		console.log('Update-Thresholds Data');
+		let gaugeId = myValuesObj.key;
+		let lowerThreshold = myValuesObj.lowerThreshold;
+		let upperThreshold = myValuesObj.upperThreshold;
+		if (gaugeId && lowerThreshold && upperThreshold && !isNaN(lowerThreshold) && !isNaN(upperThreshold)) {
+			myQueryString = `UPDATE scantypes SET upperthreshold = ${upperThreshold}, lowerthreshold = ${lowerThreshold} WHERE scantypeid = ${gaugeId}`;
 		}
+		console.log(myQueryString);
+	}
 
 
 
