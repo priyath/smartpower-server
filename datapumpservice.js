@@ -496,7 +496,7 @@ function processValueRequest(req, res) {
 	}
 	else if (myValuesObj.calltype === 'Energy-Consumption'){
 		console.log('Energy Consumption Data');
-		let myQueryString1 = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power  FROM realtimedata WHERE location = '${myValuesObj.filter}'`
+		let myQueryString1 = `SELECT DATE_FORMAT(read_time, '%Y-%m') as date, UNIX_TIMESTAMP(read_time) as read_time, power FROM realtimedata WHERE location = '${myValuesObj.filter}' AND (DATE_FORMAT(read_time, '%Y-%m-%d') >= '${myValuesObj.fromDate}' AND DATE_FORMAT(read_time, '%Y-%m-%d') <= '${myValuesObj.toDate}')`
 		let myQueryString2 = `SELECT location, COUNT(*) as alertCount FROM criticalalerts WHERE location = '${myValuesObj.filter}'`
 		myQueryString = myQueryString1 + '; ' + myQueryString2;
 		console.log(myQueryString);
