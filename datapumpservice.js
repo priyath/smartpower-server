@@ -212,6 +212,11 @@ function processValueRequest(req, res) {
 	  	myQueryString=`UPDATE monitoringpoints SET lat = ${myValuesObj.geoLat}, lng = ${myValuesObj.geoLng} WHERE location = '${myValuesObj.filter}'`;
 		console.log('Update-Locations Query: ', myQueryString);
 	}
+	else if(myValuesObj.calltype == 'Add-Locations')
+	{
+		myQueryString=`INSERT INTO monitoringpoints (locationid, location, lat, lng) VALUES (${myValuesObj.location}, ${myValuesObj.location}, ${myValuesObj.geoLat}, ${myValuesObj.geoLng})`;
+		console.log('Add-Locations Query: ', myQueryString);
+	}
 	else if(myValuesObj.calltype == 'User-Locations')
 	{
 		myQueryString=`SELECT locationid, location, lat, lng FROM monitoringpoints`;
