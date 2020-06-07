@@ -207,13 +207,18 @@ function processValueRequest(req, res) {
 	{
 			  myQueryString='SELECT a.username, userrole FROM users a WHERE ' + myValuesObj.filter;
 	}
+	else if(myValuesObj.calltype == 'Update-Locations')
+	{
+	  	myQueryString=`UPDATE monitoringpoints SET lat = ${myValuesObj.geoLat}, lng = ${myValuesObj.geoLng} WHERE location = '${myValuesObj.filter}'`;
+		console.log('Update-Locations Query: ', myQueryString);
+	}
 	else if(myValuesObj.calltype == 'User-Locations')
 	{
-			  myQueryString='SELECT locationid, location, lat, lng FROM monitoringpoints x, (SELECT locationname FROM users a, userlocation b WHERE a.username = b.username AND a.username = \'' + myValuesObj.filter + '\') y WHERE x.location = y.locationname';
+		myQueryString=`SELECT locationid, location, lat, lng FROM monitoringpoints`;
 	}
 	else if(myValuesObj.calltype == 'Admin-Locations')
 	{
-			  myQueryString='select locationid, location from monitoringpoints';
+	  	myQueryString='select locationid, location from monitoringpoints';
 	}
 	else
 	if (myValuesObj.calltype == 'Critical')
