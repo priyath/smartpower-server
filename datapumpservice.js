@@ -214,7 +214,7 @@ function processValueRequest(req, res) {
 	}
 	else if(myValuesObj.calltype == 'Add-Locations')
 	{
-		myQueryString=`INSERT INTO monitoringpoints (locationid, location, lat, lng) VALUES (${myValuesObj.location}, ${myValuesObj.location}, ${myValuesObj.geoLat}, ${myValuesObj.geoLng})`;
+		myQueryString=`INSERT INTO monitoringpoints (locationid, location, lat, lng) VALUES ('${myValuesObj.location}', '${myValuesObj.location}', ${myValuesObj.geoLat}, ${myValuesObj.geoLng})`;
 		console.log('Add-Locations Query: ', myQueryString);
 	}
 	else if(myValuesObj.calltype == 'User-Locations')
