@@ -209,7 +209,7 @@ function processValueRequest(req, res) {
 	}
 	else if(myValuesObj.calltype == 'User-Locations')
 	{
-			  myQueryString='SELECT locationid, location FROM monitoringpoints x, (SELECT locationname FROM users a, userlocation b WHERE a.username = b.username AND a.username = \'' + myValuesObj.filter + '\') y WHERE x.location = y.locationname';
+			  myQueryString='SELECT locationid, location, lat, lng FROM monitoringpoints x, (SELECT locationname FROM users a, userlocation b WHERE a.username = b.username AND a.username = \'' + myValuesObj.filter + '\') y WHERE x.location = y.locationname';
 	}
 	else if(myValuesObj.calltype == 'Admin-Locations')
 	{
