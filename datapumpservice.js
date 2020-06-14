@@ -209,17 +209,31 @@ function processValueRequest(req, res) {
 	}
 	else if(myValuesObj.calltype == 'Update-Locations')
 	{
-	  	myQueryString=`UPDATE monitoringpoints SET lat = ${myValuesObj.geoLat}, lng = ${myValuesObj.geoLng} WHERE location = '${myValuesObj.filter}'`;
+	  	myQueryString=`UPDATE monitoringpoints 
+			SET 
+				lat = ${myValuesObj.geoLat}, 
+				lng = ${myValuesObj.geoLng},
+				primary_name = ${myValuesObj.contactName},
+				primary_mobile = ${myValuesObj.contactPhone},
+				primaryemail = ${myValuesObj.contactEmail}
+			WHERE location = '${myValuesObj.filter}'`;
 		console.log('Update-Locations Query: ', myQueryString);
 	}
 	else if(myValuesObj.calltype == 'Add-Locations')
 	{
-		myQueryString=`INSERT INTO monitoringpoints (locationid, location, lat, lng) VALUES ('${myValuesObj.location}', '${myValuesObj.location}', ${myValuesObj.geoLat}, ${myValuesObj.geoLng})`;
+		myQueryString=`INSERT INTO monitoringpoints (locationid, location, lat, lng, primary_name, primary_mobile, primaryemail) VALUES 
+			('${myValuesObj.location}', 
+			'${myValuesObj.location}', 
+			${myValuesObj.geoLat}, 
+			${myValuesObj.geoLng}, 
+			'${myValuesObj.contactName}', 
+			'${myValuesObj.contactPhone}', 
+			'${myValuesObj.contactEmail}')`;
 		console.log('Add-Locations Query: ', myQueryString);
 	}
 	else if(myValuesObj.calltype == 'User-Locations')
 	{
-		myQueryString=`SELECT locationid, location, lat, lng FROM monitoringpoints`;
+		myQueryString=`SELECT locationid, location, lat, lng, primary_name, primary_mobile, primaryemail FROM monitoringpoints`;
 	}
 	else if(myValuesObj.calltype == 'Admin-Locations')
 	{
