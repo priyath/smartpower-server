@@ -496,7 +496,7 @@ function processValueRequest(req, res) {
 		}
 
 	else if (myValuesObj.calltype === 'Today-Data'){
-		myQueryString = `select IFNULL(SUM(energy), 0) as todayEnergy, IFNULL(MIN(voltage_ln_average), 0) as minVoltage, IFNULL(MAX(voltage_ln_average), 0) as maxVoltage, IFNULL(MAX(power), 0) todayPeakKW from realtimedata WHERE MONTH(read_time) = MONTH(CURRENT_DATE()) AND YEAR(read_time) = YEAR(CURRENT_DATE()) AND location = '${myValuesObj.filter}'`;
+		myQueryString = `select IFNULL(SUM(energy), 0) as todayEnergy, IFNULL(MIN(voltage_ln_average), 0) as minVoltage, IFNULL(MAX(voltage_ln_average), 0) as maxVoltage, IFNULL(MAX(power), 0) todayPeakKW from realtimedata WHERE MONTH(read_time) = MONTH(CURRENT_DATE()) AND YEAR(read_time) = YEAR(CURRENT_DATE()) AND DAY(read_time) = DAY(CURRENT_DATE()) AND location = '${myValuesObj.filter}'`;
 		console.log(myQueryString);
 	}
 	else if (myValuesObj.calltype === 'Comparison-Data'){
