@@ -213,9 +213,9 @@ function processValueRequest(req, res) {
 			SET 
 				lat = ${myValuesObj.geoLat}, 
 				lng = ${myValuesObj.geoLng},
-				primary_name = ${myValuesObj.contactName},
-				primary_mobile = ${myValuesObj.contactPhone},
-				primaryemail = ${myValuesObj.contactEmail}
+				primary_name = '${myValuesObj.contactName}',
+				primary_mobile = '${myValuesObj.contactPhone}',
+				primaryemail = '${myValuesObj.contactEmail}'
 			WHERE location = '${myValuesObj.filter}'`;
 		console.log('Update-Locations Query: ', myQueryString);
 	}
