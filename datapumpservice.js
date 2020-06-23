@@ -340,6 +340,13 @@ function processValueRequest(req, res) {
 
 	}
 	else
+	if (myValuesObj.calltype === 'Alerts-Summary')
+	{
+
+		myQueryString='select location, count(*) as alert_count from criticalalerts group by location'
+
+	}
+	else
 		if (myValuesObj.calltype == 'Load-Thresholds')
 		{
 
