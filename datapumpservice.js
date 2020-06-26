@@ -343,7 +343,7 @@ function processValueRequest(req, res) {
 	if (myValuesObj.calltype === 'Alerts-Summary')
 	{
 
-		myQueryString='select location, count(*) as alert_count from criticalalerts group by location'
+		myQueryString='select location, scantype, count(*) as alert_count from criticalalerts group by location, scantype'
 
 	}
 	else
